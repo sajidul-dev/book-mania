@@ -1,10 +1,13 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
+import { BookInterface } from "../types/bookType";
 
-const BookCard = ({ book }) => {
-  console.log("hello", book);
+const BookCard = ({ book }: { book: BookInterface }) => {
+  const navigate = useNavigate();
   return (
     <div className="border border-black flex items-center">
-      <div className="w-[200px] h-[300px] flex items-center  p-2">
+      <div
+        onClick={() => navigate(`/book/${book._id}`)}
+        className="w-[200px] h-[300px] flex items-center  p-2 cursor-pointer">
         <img className="w-[100%]" src={book.image} alt="" />
       </div>
       <div className="p-3">
