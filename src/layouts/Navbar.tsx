@@ -14,39 +14,31 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex justify-between items-center p-5 gap-4  text-black">
-      <div className="w-[20%] tracking-widest font-bold text-2xl bg-emerald-500 text-center py-2 rounded">
-        Book <span className="text-white">House</span>
-      </div>
-      <ul className="w-[60%] flex items-center justify-around bg-emerald-500 py-2 rounded">
-        <li className="border-2 text-white border-black px-5 py-1 rounded-md">
-          <button>
-            <Link className="font-semibold" to="/">
-              Home
-            </Link>
-          </button>
-        </li>
-        <li className="border-2 text-white border-black px-5 py-1 rounded-md">
-          <button>
-            <Link className="font-semibold" to="/all-books">
-              All Books
-            </Link>
-          </button>
-        </li>
-        <li className="border-2 text-white border-black px-5 py-1 rounded-md">
-          <button>
-            <Link className="font-semibold" to="/add-new-book">
-              Add New
-            </Link>
-          </button>
-        </li>
-      </ul>
-      <div
-        className="w-[20%] cursor-pointer bg-emerald-500 text-center py-3 rounded "
-        onClick={handleLogout}>
-        <span className="border-2 border-red-600 rounded text-white font-semibold px-3 py-2">
+    <div className="flex justify-between p-5 bg-[#2a70f3] text-white">
+      <Link to="/" className="font-bold cursor-pointer tex-xl">
+        Book Mania
+      </Link>
+      <div className="flex  space-x-2">
+        <ul className="flex items-end  space-x-2">
+          <li>
+            <button>
+              <Link to="/">Home</Link>
+            </button>
+          </li>
+          <li>
+            <button>
+              <Link to="/all-books">All Books</Link>
+            </button>
+          </li>
+          <li>
+            <button>
+              <Link to="/add-new-book">Add New</Link>
+            </button>
+          </li>
+        </ul>
+        <div className="cursor-pointer" onClick={handleLogout}>
           {user.email ? "Log Out" : "Log In"}
-        </span>
+        </div>
       </div>
     </div>
   );

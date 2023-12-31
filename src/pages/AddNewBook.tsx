@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import { useAppSelector } from "../redux/hook";
 
 const AddNewBook = () => {
   const [title, setTitle] = useState("");
@@ -12,6 +13,7 @@ const AddNewBook = () => {
   const [image, setImage] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [postBook, { isLoading, isError, isSuccess }] = usePostBookMutation();
+  const { user } = useAppSelector((state) => state.user);
   console.log(startDate);
   useEffect(() => {
     if (isSuccess) {
@@ -25,6 +27,7 @@ const AddNewBook = () => {
 
   const handleAddBook = () => {
     postBook({
+      userId: user._id,
       title,
       author,
       genre,

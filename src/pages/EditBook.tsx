@@ -21,16 +21,23 @@ const EditBook = () => {
     useEditBookMutation();
 
   useEffect(() => {
-    setStartDate(new Date(book?.data?.publicationDate));
-    setTitle(book.data.title);
-    setAuthor(book.data.author);
-    setGenre(book.data.genre);
-    setImage(book.data.image);
+    if (book) {
+      setStartDate(new Date(book?.data?.publicationDate));
+      setTitle(book.data.title);
+      setAuthor(book.data.author);
+      setGenre(book.data.genre);
+      setImage(book.data.image);
+    }
+  }, []);
+
+  useEffect(() => {
     if (isSuccess) {
       //   setTitle("");
       //   setAuthor("");
       //   setGenre("");
       //   setImage("");
+      //   refetch();
+      console.log(book, "BOOK");
       toast.success("Edit book successful");
     }
   }, [isSuccess]);

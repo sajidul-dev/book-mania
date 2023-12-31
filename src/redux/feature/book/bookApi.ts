@@ -23,15 +23,7 @@ const productApi = api.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["books"],
     }),
-    // deleteBook: builder.mutation({
-    //   query: (id) => ({
-    //     url: `/book/${id}`,
-    //     method: "DELETE",
-    //   }),
-    //   invalidatesTags: ["books"],
-    // }),
     deleteBook: builder.mutation({
       query(id) {
         return {
@@ -41,34 +33,27 @@ const productApi = api.injectEndpoints({
       },
       invalidatesTags: ["books"],
     }),
-    // deleteBook: builder.mutation({
-    //   query: (id) => ({
-    //     url: `/book/${id}`,
-    //     method: "DELETE",
-    //   }),
-    //   invalidatesTags: ["books"],
-    // }),
-    postComment: builder.mutation({
-      query: ({ id, data }) => ({
-        url: `/comment/${id}`,
+    postReview: builder.mutation({
+      query: (data) => ({
+        url: `/review`,
         method: "POST",
         body: data,
       }),
       invalidatesTags: ["reviews"],
     }),
-    getComment: builder.query({
-      query: (id) => `/comment/${id}`,
+    getReviews: builder.query({
+      query: (id) => `/reviews/${id}`,
       providesTags: ["reviews"],
     }),
   }),
 });
 
 export const {
-  useGetCommentQuery,
   useGetBooksQuery,
-  usePostCommentMutation,
   usePostBookMutation,
   useSingleBookQuery,
   useDeleteBookMutation,
   useEditBookMutation,
+  usePostReviewMutation,
+  useGetReviewsQuery,
 } = productApi;
