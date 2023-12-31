@@ -7,6 +7,13 @@ import {
 } from "../redux/feature/user/userApi";
 import { useAppDispatch } from "../redux/hook";
 import { setUser } from "../redux/feature/user/userSlice";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
+
+type ApiResponse = {
+  data?: any;
+  error?: FetchBaseQueryError | SerializedError;
+};
 
 const Auth = () => {
   const [isLoginActive, setIsLoginActive] = useState(true);
@@ -43,37 +50,44 @@ const Auth = () => {
   const [signIn] = useSignInMutation();
   const [signUp] = useSignUpMutation();
   const dispatch = useAppDispatch();
-
+  const isFetchBaseQueryError = (error: any): error is FetchBaseQueryError => {
+    return error && "status" in error;
+  };
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const apiResponse = await signIn({
+    const apiResponse: ApiResponse = await signIn({
       email: `${email}`,
       password: `${password}`,
     });
     navigate("/");
 
-    if (apiResponse?.error?.status === 404) {
-      console.log(apiResponse.error.data.response);
-    } else {
+    // if (apiResponse?.error?.status === 404) {
+    //   console.log(apiResponse?.error.data.response);
+    // } else {
+    //   dispatch(setUser(apiResponse?.data.user));
+    // }
+    if (
+      isFetchBaseQueryError(apiResponse.error) &&
+      apiResponse.error.status === 404
+    ) {
+      console.log(apiResponse.error?.data);
+    } else if (apiResponse.data) {
       dispatch(setUser(apiResponse.data.user));
-      console.log(apiResponse.data.user, "apiResponse");
     }
   };
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const apiResponse = await signUp({
+    const apiResponse: ApiResponse = await signUp({
       name: `${firstName} ${lastName}`,
       email: `${email}`,
       password: `${password}`,
     });
-    if (apiResponse.data?.response === "User already exist") {
-      alert(apiResponse.data?.response);
+    if (apiResponse?.data?.response === "User already exist") {
+      alert(apiResponse?.data?.response);
     } else {
       navigate("/auth/#login");
     }
-
-    console.log(apiResponse, "apiResponse");
   };
 
   return (
@@ -82,15 +96,13 @@ const Auth = () => {
         <div className="button-box">
           <div
             className="btn-active-back"
-            style={{ left: isLoginActive ? "0px" : "50%" }}
-          ></div>
+            style={{ left: isLoginActive ? "0px" : "50%" }}></div>
           <button className="toggle-btn login-btn" onClick={handleLoginClick}>
             &nbsp;&nbsp;Login
           </button>
           <button
             className="toggle-btn register-btn"
-            onClick={handleRegisterClick}
-          >
+            onClick={handleRegisterClick}>
             &nbsp;&nbsp;Register
           </button>
         </div>
@@ -100,8 +112,7 @@ const Auth = () => {
             id="login"
             className="login-form"
             onSubmit={handleSignIn}
-            style={{ left: isLoginActive ? "0px" : "-115%" }}
-          >
+            style={{ left: isLoginActive ? "0px" : "-115%" }}>
             <div className="input-box">
               <input
                 id="loginEmail"
@@ -133,8 +144,7 @@ const Auth = () => {
             id="signup"
             className="register-form"
             style={{ left: isLoginActive ? "115%" : "0px" }}
-            onSubmit={handleSignUp}
-          >
+            onSubmit={handleSignUp}>
             <div className="input-box">
               <input
                 id="firstName"
