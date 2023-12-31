@@ -1,10 +1,8 @@
-import React from "react";
 import { useSingleBookQuery } from "../redux/feature/book/bookApi";
 import { useParams } from "react-router-dom";
 
 const SingleBook = () => {
   const { id } = useParams();
-  console.log(id);
   const { data: book, isLoading, error } = useSingleBookQuery(id);
 
   if (isLoading) {
@@ -13,7 +11,6 @@ const SingleBook = () => {
   if (error) {
     return <div>Error</div>;
   }
-  console.log(book);
   return (
     <>
       <div className="flex max-w-7xl mx-auto items-center border-b border-gray-300">
