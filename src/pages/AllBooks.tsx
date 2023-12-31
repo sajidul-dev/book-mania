@@ -13,7 +13,7 @@ const AllBooks = () => {
   const [selectedCategory, setSelectedCategory] = useState("All Category");
   const [allCategories, setAllCategories] = useState<string[]>([]);
   const [allBooks, setAllBooks] = useState<BookInterface[]>([]);
-  const [selectDate, setSelectDate] = useState<any | undefined>("");
+  const [selectDate, setSelectDate] = useState<Date | null | undefined>(null);
 
   useEffect(() => {
     if (data?.data) {
@@ -30,15 +30,19 @@ const AllBooks = () => {
 
   useEffect(() => {
     let filteredData = [];
-    const currentSelectDate = new Date(selectDate).getFullYear();
+    const currentSelectDate = selectDate
+      ? new Date(selectDate).getFullYear()
+      : null;
 
     console.log(currentSelectDate, "currentSelectDate", selectDate);
 
     if (searchText !== "") {
+      // Convert search text to lower case for case-insensitive search
       const lowerCaseSearchText = searchText.toLowerCase();
 
+      // Filter data based on matching title, author, or genre
       filteredData = data?.data.filter(
-        (item: any) =>
+        (item: BookInterface) =>
           item.title.toLowerCase().includes(lowerCaseSearchText) ||
           item.author.toLowerCase().includes(lowerCaseSearchText) ||
           item.genre.toLowerCase().includes(lowerCaseSearchText)
@@ -46,14 +50,15 @@ const AllBooks = () => {
       setAllBooks(filteredData);
     } else if (searchText === "" && selectedCategory !== "All Category") {
       const lowerCaseSelectedCategory = selectedCategory.toLowerCase();
-      if (currentSelectDate !== 1970 && selectDate !== "") {
+      // Filter data based on matching title, author, or genre
+      if (currentSelectDate !== 1970 && selectDate !== null) {
         filteredData = data?.data.filter(
-          (item: any) =>
+          (item: BookInterface) =>
             item.genre.toLowerCase().includes(lowerCaseSelectedCategory) &&
-            parseInt(item.publication) === currentSelectDate
+            parseInt(item.publicationDate) === currentSelectDate
         );
       } else {
-        filteredData = data?.data.filter((item: any) =>
+        filteredData = data?.data.filter((item: BookInterface) =>
           item.genre.toLowerCase().includes(lowerCaseSelectedCategory)
         );
       }
@@ -62,14 +67,16 @@ const AllBooks = () => {
       searchText === "" &&
       selectedCategory === "All Category" &&
       currentSelectDate !== 1970 &&
-      selectDate !== ""
+      selectDate !== null
     ) {
       const filteredData = data?.data.filter(
-        (item: any) => parseInt(item.publication) === currentSelectDate
+        (item: BookInterface) =>
+          parseInt(item.publicationDate) === currentSelectDate
       );
 
       setAllBooks(filteredData);
     } else {
+      // If no search text, use the original data
       filteredData = data?.data;
       setAllBooks(filteredData);
     }
@@ -163,7 +170,7 @@ const AllBooks = () => {
                 onChange={(e) => {
                   setSearchText(e.target.value);
                   setSelectedCategory("All Category");
-                  setSelectDate("");
+                  setSelectDate(null);
                 }}
               />
               <button

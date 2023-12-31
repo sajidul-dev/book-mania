@@ -9,6 +9,20 @@ import DeleteConfirmationDialog from "../components/DeleteConfirmationDialog";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+interface Review {
+  _id: string;
+  userId: string;
+  user: {
+    _id: string;
+    name: string;
+    email: string;
+    authKey: number;
+    password: string;
+  };
+  bookId: string;
+  review: string;
+}
+
 const SingleBook = () => {
   const [openModal, setOpenModal] = useState(false);
   const [review, setReview] = useState("");
@@ -80,7 +94,7 @@ const SingleBook = () => {
       </div>
       {reviews.length > 0 ? (
         <div className="flex flex-wrap gap-4 my-5">
-          {reviews.map((review: any) => {
+          {reviews.map((review: Review) => {
             return (
               <div
                 key={review._id}
